@@ -8,7 +8,7 @@ def load_subtitles(filename, as_hash = false)
       while (line = file.gets).strip != '' and !file.eof? do
         record << line
       end
-      break if 0 == record.size
+      next if 0 == record.size
       timeframe = record[1].chomp
       if as_hash
         subtitles[timeframe.split[0]] = { :index => record[0], :timeframe => timeframe, :text => record[2,record.size-1] }
