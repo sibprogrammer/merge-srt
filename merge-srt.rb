@@ -18,16 +18,26 @@ def load_subtitles(filename, as_hash = false)
     end
   end
 
+  $stderr.puts "Subtitles from file #{filename} were loaded."
+  $stderr.puts "Number of entries: #{subtitles.size}"
+
   subtitles
 end
 
 def merge_subtitles(main_subtitles, addon_subtitles)
+  found = 0
   main_subtitles.each do |record|
     start_time = record[:timeframe].chomp.split[0]
     if addon_subtitles.has_key?(start_time)
       record[:text] << addon_subtitles[start_time][:text]
+      found += 1
     end
   end
+  
+  $stderr.puts "Merged entries: #{found}"
+  $stderr.puts "Merge ratio: %d%%" % ((found.to_f / main_subtitles.size) * 100).to_i.to_s 
+
+  main_subtitles
 end
 
 def print_subtitles(subtitles)
