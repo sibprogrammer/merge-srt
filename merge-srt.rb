@@ -11,7 +11,8 @@ def load_subtitles(filename, as_hash = false)
       next if 0 == record.size
       timeframe = record[1].chomp
       if as_hash
-        subtitles[timeframe.split[0]] = { :index => record[0], :timeframe => timeframe, :text => record[2,record.size-1] }
+        start_time = timeframe.split[0].split(',')[0]
+        subtitles[start_time] = { :index => record[0], :timeframe => timeframe, :text => record[2,record.size-1] }
       else
         subtitles << { :index => record[0], :timeframe => timeframe, :text => record[2,record.size-1] }
       end
@@ -27,7 +28,7 @@ end
 def merge_subtitles(main_subtitles, addon_subtitles)
   found = 0
   main_subtitles.each do |record|
-    start_time = record[:timeframe].chomp.split[0]
+    start_time = record[:timeframe].chomp.split[0].split(',')[0]
     if addon_subtitles.has_key?(start_time)
       record[:text] << addon_subtitles[start_time][:text]
       found += 1
